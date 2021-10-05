@@ -1,16 +1,18 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json;
+using TG.Configs.Api.Entities;
 
-namespace TG.Configs.Api.Entities
+namespace TG.Configs.Api.Models.Response
 {
-    public class Config
+    public class ConfigResponse
     {
         public string Id { get; set; } = default!;
         
         public string Secret { get; set; } = default!;
         
         public object? Content { get; set; }
-        
+
         public string CreatedBy { get; set; } = default!;
         
         public DateTime CreatedAt{ get; set; }

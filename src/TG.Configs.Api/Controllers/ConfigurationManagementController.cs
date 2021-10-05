@@ -1,11 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using TG.Configs.Api.Application.Commands;
+using TG.Configs.Api.Application.Queries;
 using TG.Configs.Api.Config;
+using TG.Configs.Api.Errors;
+using TG.Configs.Api.Models.Request;
+using TG.Configs.Api.Models.Response;
 using TG.Core.App.Constants;
+using TG.Core.App.Extensions;
+using TG.Core.App.OperationResults;
 
 namespace TG.Configs.Api.Controllers
 {
@@ -15,29 +20,54 @@ namespace TG.Configs.Api.Controllers
     [Authorize(Roles = TgUserRoles.Admin)]
     public class ConfigurationManagementController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private readonly IMediator _mediator;
 
-        private readonly ILogger<ConfigurationManagementController> _logger;
-
-        public ConfigurationManagementController(ILogger<ConfigurationManagementController> logger)
+        public ConfigurationManagementController(IMediator mediator)
         {
-            _logger = logger;
+            _mediator = mediator;
         }
 
         [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        public async Task<ActionResult<ConfigItemsResponse>> Get()
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-                {
-                    Date = DateTime.Now.AddDays(index),
-                    TemperatureC = rng.Next(-20, 55),
-                    Summary = Summaries[rng.Next(Summaries.Length)]
-                })
-                .ToArray();
+            var result = await _mediator.Send(new GetConfigsQuery());
+            return result.ToActionResult()
+                .Ok();
+        }
+        
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ConfigResponse>> Get([FromRoute] string id)
+        {
+            var result = await _mediator.Send(new GetConfigQuery(id));
+            return result.ToActionResult()
+                .NotFound(AppErrors.NotFound)
+                .Ok();
+        }
+        
+        [HttpPost]
+        public async Task<ActionResult<ConfigResponse>> Create([FromBody] ConfigRequest request)
+        {
+            var result = await _mediator.Send(new CreateConfigCommand(request.Id, request.Content, User.GetEmail()));
+            return result.ToActionResult()
+                .Created();
+        }
+        
+        [HttpPut("{id}")]
+        public async Task<ActionResult<ConfigResponse>> Update([FromRoute] string id, [FromBody] ConfigRequest request)
+        {
+            var result = await _mediator.Send(new UpdateConfigCommand(id, request.Content, User.GetEmail()));
+            return result.ToActionResult()
+                .NotFound(AppErrors.NotFound)
+                .Ok();
+        }
+        
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete([FromRoute] string id)
+        {
+            var result = await _mediator.Send(new DeleteConfigCommand(id, User.GetEmail()));
+            return result.ToActionResult()
+                .NotFound(AppErrors.NotFound)
+                .NoContent();
         }
     }
 }

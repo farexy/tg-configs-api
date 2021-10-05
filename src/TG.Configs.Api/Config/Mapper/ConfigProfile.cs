@@ -1,4 +1,5 @@
 using AutoMapper;
+using TG.Configs.Api.Models.Response;
 
 namespace TG.Configs.Api.Config.Mapper
 {
@@ -6,6 +7,8 @@ namespace TG.Configs.Api.Config.Mapper
     {
         public ConfigProfile()
         {
+            CreateMap<Entities.Config, ConfigResponse>();
+            CreateMap<Entities.Config, ConfigItemResponse>();
         }
     }
 }
