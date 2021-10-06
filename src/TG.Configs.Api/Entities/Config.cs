@@ -9,7 +9,7 @@ namespace TG.Configs.Api.Entities
         
         public string Secret { get; set; } = default!;
         
-        public object? Content { get; set; }
+        public string? Content { get; set; }
         
         public string CreatedBy { get; set; } = default!;
         

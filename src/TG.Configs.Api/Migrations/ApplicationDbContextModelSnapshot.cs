@@ -50,7 +50,7 @@ namespace TG.Configs.Api.Migrations
                         .HasColumnType("text")
                         .HasColumnName("id");
 
-                    b.Property<object>("Content")
+                    b.Property<string>("Content")
                         .HasColumnType("jsonb")
                         .HasColumnName("content");
 

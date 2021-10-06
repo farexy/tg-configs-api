@@ -4,6 +4,6 @@
     {
         public string Id { get; set; } = default!;
         
-        public object? Content { get; set; }
+        public string? Content { get; set; }
     }
 }

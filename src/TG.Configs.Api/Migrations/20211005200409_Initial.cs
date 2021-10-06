@@ -13,7 +13,7 @@ namespace TG.Configs.Api.Migrations
                 {
                     id = table.Column<string>(type: "text", nullable: false),
                     secret = table.Column<string>(type: "text", nullable: false),
-                    content = table.Column<object>(type: "jsonb", nullable: true),
+                    content = table.Column<string>(type: "jsonb", nullable: true),
                     created_by = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     updated_by = table.Column<string>(type: "text", nullable: false),

@@ -1,15 +1,17 @@
-﻿using System.Threading;
+﻿using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TG.Configs.Api.Db;
+using TG.Configs.Api.Errors;
 using TG.Configs.Api.Models.Response;
 using TG.Core.App.OperationResults;
 using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record CreateConfigCommand(string Id, object? Content, string UserEmail) : IRequest<OperationResult<ConfigResponse>>;
+    public record CreateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigResponse>>;
     
     public class CreateConfigCommandHandler : IRequestHandler<CreateConfigCommand, OperationResult<ConfigResponse>>
     {
@@ -30,7 +32,11 @@ namespace TG.Configs.Api.Application.Commands
 
         public async Task<OperationResult<ConfigResponse>> Handle(CreateConfigCommand request, CancellationToken cancellationToken)
         {
-            var config = new ConfigResponse
+            if (!ContentValidator.IsValid(request.Content))
+            {
+                return AppErrors.InvalidContent;
+            }
+            var config = new Entities.Config
             {
                 Id = request.Id,
                 Secret = _cryptoStringGenerator.Generate(SecretLength),

@@ -4,13 +4,14 @@ using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TG.Configs.Api.Db;
+using TG.Configs.Api.Errors;
 using TG.Configs.Api.Models.Response;
 using TG.Core.App.OperationResults;
 using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record UpdateConfigCommand(string Id, object? Content, string UserEmail) : IRequest<OperationResult<ConfigResponse>>;
+    public record UpdateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigResponse>>;
     
     public class UpdateConfigCommandHandler : IRequestHandler<UpdateConfigCommand, OperationResult<ConfigResponse>>
     {
@@ -28,6 +29,10 @@ namespace TG.Configs.Api.Application.Commands
 
         public async Task<OperationResult<ConfigResponse>> Handle(UpdateConfigCommand request, CancellationToken cancellationToken)
         {
+            if (!ContentValidator.IsValid(request.Content))
+            {
+                return AppErrors.InvalidContent;
+            }
             var config = await _dbContext.Configs.FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
 
             config.Content = request.Content;
