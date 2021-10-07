@@ -6,5 +6,6 @@ namespace TG.Configs.Api.Errors
     {
         public static readonly ErrorResult NotFound = new ErrorResult("not_found", "Not found");
         public static readonly ErrorResult InvalidContent = new ErrorResult("invalid_content", "Invalid json content");
+        public static readonly ErrorResult InvalidSecret = new ErrorResult("invalid_secret", "Invalid secret");
     }
 }
