@@ -7,7 +7,7 @@ namespace TG.Configs.Api.Config.Mapper
     {
         public ConfigProfile()
         {
-            CreateMap<Entities.Config, ConfigResponse>();
+            CreateMap<Entities.Config, ConfigManagementResponse>();
             CreateMap<Entities.Config, ConfigItemResponse>();
         }
     }

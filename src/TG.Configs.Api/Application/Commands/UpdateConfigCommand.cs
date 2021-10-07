@@ -11,9 +11,9 @@ using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record UpdateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigResponse>>;
+    public record UpdateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigManagementResponse>>;
     
-    public class UpdateConfigCommandHandler : IRequestHandler<UpdateConfigCommand, OperationResult<ConfigResponse>>
+    public class UpdateConfigCommandHandler : IRequestHandler<UpdateConfigCommand, OperationResult<ConfigManagementResponse>>
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
@@ -27,7 +27,7 @@ namespace TG.Configs.Api.Application.Commands
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task<OperationResult<ConfigResponse>> Handle(UpdateConfigCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<ConfigManagementResponse>> Handle(UpdateConfigCommand request, CancellationToken cancellationToken)
         {
             if (!ContentValidator.IsValid(request.Content))
             {
@@ -41,7 +41,7 @@ namespace TG.Configs.Api.Application.Commands
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<ConfigResponse>(config);
+            return _mapper.Map<ConfigManagementResponse>(config);
         }
     }
 }

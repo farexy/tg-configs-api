@@ -11,9 +11,9 @@ using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record CreateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigResponse>>;
+    public record CreateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigManagementResponse>>;
     
-    public class CreateConfigCommandHandler : IRequestHandler<CreateConfigCommand, OperationResult<ConfigResponse>>
+    public class CreateConfigCommandHandler : IRequestHandler<CreateConfigCommand, OperationResult<ConfigManagementResponse>>
     {
         private const int SecretLength = 32;
         private readonly ApplicationDbContext _dbContext;
@@ -30,7 +30,7 @@ namespace TG.Configs.Api.Application.Commands
             _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task<OperationResult<ConfigResponse>> Handle(CreateConfigCommand request, CancellationToken cancellationToken)
+        public async Task<OperationResult<ConfigManagementResponse>> Handle(CreateConfigCommand request, CancellationToken cancellationToken)
         {
             if (!ContentValidator.IsValid(request.Content))
             {
@@ -50,7 +50,7 @@ namespace TG.Configs.Api.Application.Commands
             await _dbContext.AddAsync(config, cancellationToken);
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            return _mapper.Map<ConfigResponse>(config);
+            return _mapper.Map<ConfigManagementResponse>(config);
         }
     }
 }

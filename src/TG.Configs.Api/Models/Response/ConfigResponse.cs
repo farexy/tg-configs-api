@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.Json;
-using TG.Configs.Api.Entities;
+using System;
 
 namespace TG.Configs.Api.Models.Response
 {
@@ -9,18 +6,8 @@ namespace TG.Configs.Api.Models.Response
     {
         public string Id { get; set; } = default!;
         
-        public string Secret { get; set; } = default!;
-        
         public string? Content { get; set; }
-
-        public string CreatedBy { get; set; } = default!;
         
-        public DateTime CreatedAt{ get; set; }
-        
-        public string UpdatedBy { get; set; } = default!;
-        
-        public DateTime UpdatedAt{ get; set; }
-        
-        public IReadOnlyList<Callback>? Callbacks { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

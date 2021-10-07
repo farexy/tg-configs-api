@@ -6,6 +6,7 @@ namespace TG.Configs.Api.Config
         public const string ProjectName = "TG.Configs.Api";
 
         public const string RoutePrefix = ServiceName + "/v{version:apiVersion}/[controller]";
-        public const string InternalRoutePrefix = "internal/" + ServiceName + "/v{version:apiVersion}/[controller]";
+        public const string BaseInternalRoutePrefix = "internal/" + ServiceName + "/v{version:apiVersion}";
+        public const string InternalRoutePrefix = BaseInternalRoutePrefix + "/[controller]";
     }
 }

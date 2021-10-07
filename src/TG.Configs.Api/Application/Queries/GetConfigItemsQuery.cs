@@ -10,20 +10,20 @@ using TG.Core.App.OperationResults;
 
 namespace TG.Configs.Api.Application.Queries
 {
-    public record GetConfigsQuery : IRequest<OperationResult<ConfigItemsResponse>>;
+    public record GetConfigItemsQuery : IRequest<OperationResult<ConfigItemsResponse>>;
     
-    public class GetConfigsQueryHandler : IRequestHandler<GetConfigsQuery, OperationResult<ConfigItemsResponse>>
+    public class GetConfigItemsQueryHandler : IRequestHandler<GetConfigItemsQuery, OperationResult<ConfigItemsResponse>>
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
 
-        public GetConfigsQueryHandler(ApplicationDbContext dbContext, IMapper mapper)
+        public GetConfigItemsQueryHandler(ApplicationDbContext dbContext, IMapper mapper)
         {
             _dbContext = dbContext;
             _mapper = mapper;
         }
 
-        public async Task<OperationResult<ConfigItemsResponse>> Handle(GetConfigsQuery request, CancellationToken cancellationToken)
+        public async Task<OperationResult<ConfigItemsResponse>> Handle(GetConfigItemsQuery request, CancellationToken cancellationToken)
         {
             var items = await _dbContext.Configs.ToListAsync(cancellationToken);
             return new ConfigItemsResponse(_mapper.Map<IEnumerable<ConfigItemResponse>>(items));

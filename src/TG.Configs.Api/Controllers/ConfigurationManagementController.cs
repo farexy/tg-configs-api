@@ -30,22 +30,22 @@ namespace TG.Configs.Api.Controllers
         [HttpGet]
         public async Task<ActionResult<ConfigItemsResponse>> Get()
         {
-            var result = await _mediator.Send(new GetConfigsQuery());
+            var result = await _mediator.Send(new GetConfigItemsQuery());
             return result.ToActionResult()
                 .Ok();
         }
         
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConfigResponse>> Get([FromRoute] string id)
+        public async Task<ActionResult<ConfigManagementResponse>> Get([FromRoute] string id)
         {
-            var result = await _mediator.Send(new GetConfigQuery(id));
+            var result = await _mediator.Send(new GetConfigManagementQuery(id));
             return result.ToActionResult()
                 .NotFound(AppErrors.NotFound)
                 .Ok();
         }
         
         [HttpPost]
-        public async Task<ActionResult<ConfigResponse>> Create([FromBody] ConfigRequest request)
+        public async Task<ActionResult<ConfigManagementResponse>> Create([FromBody] ConfigRequest request)
         {
             var result = await _mediator.Send(new CreateConfigCommand(request.Id, request.Content, User.GetEmail()));
             return result.ToActionResult()
@@ -53,7 +53,7 @@ namespace TG.Configs.Api.Controllers
         }
         
         [HttpPut("{id}")]
-        public async Task<ActionResult<ConfigResponse>> Update([FromRoute] string id, [FromBody] ConfigRequest request)
+        public async Task<ActionResult<ConfigManagementResponse>> Update([FromRoute] string id, [FromBody] ConfigRequest request)
         {
             var result = await _mediator.Send(new UpdateConfigCommand(id, request.Content, User.GetEmail()));
             return result.ToActionResult()
