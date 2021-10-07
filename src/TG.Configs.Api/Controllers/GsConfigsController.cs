@@ -9,16 +9,17 @@ using TG.Core.App.Constants;
 using TG.Core.App.InternalCalls;
 using TG.Core.App.OperationResults;
 
-namespace TG.Configs.Api.Controllers.Internal
+namespace TG.Configs.Api.Controllers
 {
-    [InternalApi]
+    [GsApi]
+    [ApiController]
     [ApiVersion(ApiVersions.V1)]
-    [Route(ServiceConst.BaseInternalRoutePrefix)]
-    public class ConfigsController : ControllerBase
+    [Route(ServiceConst.RoutePrefix)]
+    public class GsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public ConfigsController(IMediator mediator)
+        public GsController(IMediator mediator)
         {
             _mediator = mediator;
         }
