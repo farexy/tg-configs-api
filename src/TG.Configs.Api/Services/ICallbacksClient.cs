@@ -7,6 +7,6 @@ namespace TG.Configs.Api.Services
 {
     public interface ICallbacksClient
     {
-        Task<OperationResult> ReloadCallbackAsync(Callback callback, string configSecret, CancellationToken cancellationToken);
+        Task<OperationResult> ReloadCallbackAsync(Callback callback, CancellationToken cancellationToken);
     }
 }

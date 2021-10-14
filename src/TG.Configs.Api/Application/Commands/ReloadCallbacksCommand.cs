@@ -33,7 +33,7 @@ namespace TG.Configs.Api.Application.Commands
             }
 
             var results = await Task.WhenAll(config.Callbacks.Select(callback =>
-                _callbacksClient.ReloadCallbackAsync(callback, config.Secret, cancellationToken)));
+                _callbacksClient.ReloadCallbackAsync(callback, cancellationToken)));
             var fail = results.FirstOrDefault(r => r.HasError);
             return fail ?? OperationResult.Success();
         }

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -9,7 +8,7 @@ using TG.Core.App.OperationResults;
 
 namespace TG.Configs.Api.Application.Queries
 {
-    public record GetConfigQuery(string Id, string Secret) : IRequest<OperationResult<ConfigResponse>>;
+    public record GetConfigQuery(string Id) : IRequest<OperationResult<ConfigResponse>>;
     
     public class GetConfigQueryHandler : IRequestHandler<GetConfigQuery, OperationResult<ConfigResponse>>
     {
@@ -26,11 +25,6 @@ namespace TG.Configs.Api.Application.Queries
             if (config is null)
             {
                 return AppErrors.NotFound;
-            }
-
-            if (!config.Secret.SequenceEqual(request.Secret))
-            {
-                return AppErrors.InvalidSecret;
             }
 
             return new ConfigResponse
