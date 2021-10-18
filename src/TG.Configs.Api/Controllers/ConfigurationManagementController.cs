@@ -1,14 +1,17 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TG.Configs.Api.Application.Commands;
 using TG.Configs.Api.Application.Queries;
 using TG.Configs.Api.Config;
+using TG.Configs.Api.Entities;
 using TG.Configs.Api.Errors;
 using TG.Configs.Api.Models.Request;
 using TG.Configs.Api.Models.Response;
 using TG.Core.App.Constants;
+using TG.Core.App.Exceptions;
 using TG.Core.App.Extensions;
 using TG.Core.App.OperationResults;
 
@@ -47,7 +50,7 @@ namespace TG.Configs.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ConfigManagementResponse>> Create([FromBody] ConfigRequest request)
         {
-            var result = await _mediator.Send(new CreateConfigCommand(request.Id, request.Content, request.Format, User.GetEmail()));
+            var result = await _mediator.Send(new CreateConfigCommand(request.Id, request.Content, Parse(request.Format), User.GetEmail()));
             return result.ToActionResult()
                 .Created();
         }
@@ -55,7 +58,7 @@ namespace TG.Configs.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ConfigManagementResponse>> Update([FromRoute] string id, [FromBody] ConfigRequest request)
         {
-            var result = await _mediator.Send(new UpdateConfigCommand(id, request.Content, request.Format, User.GetEmail()));
+            var result = await _mediator.Send(new UpdateConfigCommand(id, request.Content, Parse(request.Format), User.GetEmail()));
             return result.ToActionResult()
                 .NotFound(AppErrors.NotFound)
                 .Ok();
@@ -77,5 +80,9 @@ namespace TG.Configs.Api.Controllers
             return result.ToActionResult()
                 .NoContent();
         }
+
+        private static ConfigFormat Parse(string format) => Enum.TryParse<ConfigFormat>(format, out var res)
+            ? res
+            : throw new BusinessLogicException("Invalid format");
     }
 }

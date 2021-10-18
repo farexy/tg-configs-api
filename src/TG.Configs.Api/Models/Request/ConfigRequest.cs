@@ -7,7 +7,7 @@ namespace TG.Configs.Api.Models.Request
         public string Id { get; set; } = default!;
         
         public string? Content { get; set; }
-        
-        public ConfigFormat Format { get; set; }
+
+        public string Format { get; set; } = default!;
     }
 }
