@@ -11,6 +11,8 @@ namespace TG.Configs.Api.Entities
         
         public string? Content { get; set; }
         
+        public ConfigFormat Format { get; set; }
+        
         public string CreatedBy { get; set; } = default!;
         
         public DateTime CreatedAt{ get; set; }

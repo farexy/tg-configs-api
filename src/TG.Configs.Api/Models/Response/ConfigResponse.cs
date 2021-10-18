@@ -1,4 +1,5 @@
 using System;
+using TG.Configs.Api.Entities;
 
 namespace TG.Configs.Api.Models.Response
 {
@@ -8,6 +9,8 @@ namespace TG.Configs.Api.Models.Response
         
         public string? Content { get; set; }
         
+        public ConfigFormat Format { get; set; }
+
         public DateTime UpdatedAt { get; set; }
     }
 }

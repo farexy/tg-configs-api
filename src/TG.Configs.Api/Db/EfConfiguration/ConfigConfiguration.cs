@@ -8,8 +8,6 @@ namespace TG.Configs.Api.Db.EfConfiguration
         public void Configure(EntityTypeBuilder<Entities.Config> entity)
         {
             entity.HasKey(c => c.Id);
-            entity.Property(c => c.Content)
-                .HasColumnType("jsonb");
         }
     }
 }

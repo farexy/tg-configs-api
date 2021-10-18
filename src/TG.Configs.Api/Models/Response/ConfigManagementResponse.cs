@@ -13,6 +13,8 @@ namespace TG.Configs.Api.Models.Response
         
         public string? Content { get; set; }
 
+        public string Format { get; set; } = default!;
+
         public string CreatedBy { get; set; } = default!;
         
         public DateTime CreatedAt{ get; set; }

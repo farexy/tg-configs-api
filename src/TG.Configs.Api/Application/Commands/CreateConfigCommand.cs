@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using MediatR;
 using TG.Configs.Api.Db;
+using TG.Configs.Api.Entities;
 using TG.Configs.Api.Errors;
 using TG.Configs.Api.Models.Response;
 using TG.Core.App.OperationResults;
@@ -11,7 +12,7 @@ using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record CreateConfigCommand(string Id, string? Content, string UserEmail) : IRequest<OperationResult<ConfigManagementResponse>>;
+    public record CreateConfigCommand(string Id, string? Content, ConfigFormat Format, string UserEmail) : IRequest<OperationResult<ConfigManagementResponse>>;
     
     public class CreateConfigCommandHandler : IRequestHandler<CreateConfigCommand, OperationResult<ConfigManagementResponse>>
     {
@@ -32,7 +33,8 @@ namespace TG.Configs.Api.Application.Commands
 
         public async Task<OperationResult<ConfigManagementResponse>> Handle(CreateConfigCommand request, CancellationToken cancellationToken)
         {
-            if (!ContentValidator.IsValid(request.Content))
+            string? optimizedContent = request.Content;
+            if (request.Format is ConfigFormat.Json && !ContentValidator.IsValid(request.Content, out optimizedContent))
             {
                 return AppErrors.InvalidContent;
             }
@@ -40,7 +42,7 @@ namespace TG.Configs.Api.Application.Commands
             {
                 Id = request.Id,
                 Secret = _cryptoStringGenerator.Generate(SecretLength),
-                Content = request.Content,
+                Content = optimizedContent,
                 CreatedBy = request.UserEmail,
                 CreatedAt = _dateTimeProvider.UtcNow,
                 UpdatedBy = request.UserEmail,

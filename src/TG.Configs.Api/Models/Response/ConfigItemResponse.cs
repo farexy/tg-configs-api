@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TG.Configs.Api.Entities;
 
 namespace TG.Configs.Api.Models.Response
 {
@@ -15,5 +16,7 @@ namespace TG.Configs.Api.Models.Response
     public class ConfigItemResponse
     {
         public string Id { get; set; } = default!;
+
+        public string Format { get; set; } = default!;
     }
 }
