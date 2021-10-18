@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TG.Configs.Api.Application.Queries;
@@ -28,6 +28,7 @@ namespace TG.Configs.Api.Controllers.Internal
         {
             var result = await _mediator.Send(new GetConfigQuery(id));
             return result.ToActionResult()
+                .BadRequest(AppErrors.InvalidSecret)
                 .NotFound(AppErrors.NotFound)
                 .Ok();
         }

@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TG.Configs.Api.Config;
 using TG.Configs.Api.Db;
+using TG.Configs.Api.Services;
 using TG.Core.App.Configuration;
 using TG.Core.App.Configuration.Auth;
 using TG.Core.App.InternalCalls;
@@ -58,6 +59,8 @@ namespace TG.Configs.Api
                 opt.ProjectName = ServiceConst.ProjectName;
                 opt.AppVersion = "1";
             });
+
+            services.AddHttpClient<ICallbacksClient, CallbacksClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

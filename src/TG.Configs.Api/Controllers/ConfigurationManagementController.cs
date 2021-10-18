@@ -69,5 +69,13 @@ namespace TG.Configs.Api.Controllers
                 .NotFound(AppErrors.NotFound)
                 .NoContent();
         }
+        
+        [HttpPost("{id}/reload")]
+        public async Task<ActionResult<OperationResult>> Reload([FromRoute] string id)
+        {
+            var result = await _mediator.Send(new ReloadCallbacksCommand(id));
+            return result.ToActionResult()
+                .NoContent();
+        }
     }
 }

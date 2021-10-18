@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.Json;
 using TG.Configs.Api.Entities;
 
 namespace TG.Configs.Api.Models.Response

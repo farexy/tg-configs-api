@@ -14,12 +14,12 @@ namespace TG.Configs.Api.Controllers
     [GsApi]
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
-    [Route(ServiceConst.RoutePrefix)]
-    public class GsController : ControllerBase
+    [Route(ServiceConst.BaseRoutePrefix)]
+    public class ConfigsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public GsController(IMediator mediator)
+        public ConfigsController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -29,6 +29,7 @@ namespace TG.Configs.Api.Controllers
         {
             var result = await _mediator.Send(new GetConfigQuery(id));
             return result.ToActionResult()
+                .BadRequest(AppErrors.InvalidSecret)
                 .NotFound(AppErrors.NotFound)
                 .Ok();
         }
