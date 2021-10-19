@@ -13,7 +13,7 @@ namespace TG.Configs.Api.Application.Commands
             }
             try
             {
-                optimizedJson = JsonDocument.Parse(content).ToString();
+                optimizedJson = JsonSerializer.Serialize(JsonSerializer.Deserialize<object>(content));
             }
             catch (JsonException)
             {
