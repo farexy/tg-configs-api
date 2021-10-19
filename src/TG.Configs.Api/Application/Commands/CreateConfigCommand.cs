@@ -42,6 +42,7 @@ namespace TG.Configs.Api.Application.Commands
                 Id = request.Id,
                 Secret = _cryptoStringGenerator.Generate(SecretLength),
                 Content = optimizedContent,
+                Format = request.Format,
                 CreatedBy = request.UserEmail,
                 CreatedAt = _dateTimeProvider.UtcNow,
                 UpdatedBy = request.UserEmail,
