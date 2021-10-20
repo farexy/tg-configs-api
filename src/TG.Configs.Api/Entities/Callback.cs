@@ -9,5 +9,7 @@ namespace TG.Configs.Api.Entities
         public string ConfigId { get; set; } = default!;
         
         public string? Url { get; set; }
+        
+        public string? TgApp { get; set; }
     }
 }

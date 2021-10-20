@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TG.Configs.Api.Db;
+using TG.Configs.Api.Entities;
 using TG.Configs.Api.Services;
 using TG.Core.App.OperationResults;
 
@@ -32,10 +34,17 @@ namespace TG.Configs.Api.Application.Commands
                 return OperationResult.Success();
             }
 
+            
+            var urls = config.Callbacks.Select(GetUrlsAsync)
             var results = await Task.WhenAll(config.Callbacks.Select(callback =>
                 _callbacksClient.ReloadCallbackAsync(callback, cancellationToken)));
             var fail = results.FirstOrDefault(r => r.HasError);
             return fail ?? OperationResult.Success();
+        }
+
+        private async Task<IEnumerable<string>> GetUrlsAsync(Callback callback)
+        {
+            
         }
     }
 }
