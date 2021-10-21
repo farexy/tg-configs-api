@@ -8,7 +8,7 @@ namespace TG.Configs.Api.ServiceClients
 {
     public interface IAppsManagerClient
     {
-        [Get]
+        [Get("v1/apps/endpoints")]
         Task<OperationResult<AppEndpointAddressesDto>> GetEndpointsAsync([Query] string app, CancellationToken cancellationToken);
     }
 }

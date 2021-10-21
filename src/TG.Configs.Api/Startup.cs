@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TG.Configs.Api.Config;
 using TG.Configs.Api.Db;
+using TG.Configs.Api.ServiceClients;
 using TG.Configs.Api.Services;
 using TG.Core.App.Configuration;
 using TG.Core.App.Configuration.Auth;
@@ -52,6 +53,7 @@ namespace TG.Configs.Api
             services.AddTgServices();
 
             services.ConfigureInternalCalls(Configuration);
+            services.AddServiceClient<IAppsManagerClient>(Configuration.GetServiceInternalUrl(TgServices.Manager)); 
 
             services.AddTgSwagger(opt =>
             {
