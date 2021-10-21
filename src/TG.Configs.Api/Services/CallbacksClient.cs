@@ -4,8 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using TG.Configs.Api.Config;
-using TG.Configs.Api.Entities;
 using TG.Configs.Api.Helpers;
+using TG.Configs.Api.ServiceClients;
 using TG.Core.App.InternalCalls;
 using TG.Core.App.OperationResults;
 
@@ -22,15 +22,15 @@ namespace TG.Configs.Api.Services
             _apiKey = opt.Value.ApiKey;
         }
 
-        public async Task<OperationResult> ReloadCallbackAsync(Callback callback, CancellationToken cancellationToken)
+        public async Task<OperationResult> ReloadCallbackAsync(string url, string configId, CancellationToken cancellationToken)
         {
             var request = new HttpRequestMessage
             {
-                RequestUri = new Uri(callback.Url + callback.ConfigId),
+                RequestUri = new Uri(url + configId),
                 Method = HttpMethod.Post,
                 Headers =
                 {
-                    {ConfigHeaders.Signature, Sha256Helper.GetSha256Hash(callback.ConfigId + _apiKey)}
+                    {ConfigHeaders.Signature, Sha256Helper.GetSha256Hash(configId + _apiKey)}
                 }
             };
             var response = await _httpClient.SendAsync(request, cancellationToken);
