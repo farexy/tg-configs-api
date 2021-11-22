@@ -8,6 +8,9 @@ namespace TG.Configs.Api.Db.EfConfiguration
         public void Configure(EntityTypeBuilder<Entities.Config> entity)
         {
             entity.HasKey(c => c.Id);
+            entity.HasMany(c => c.Variables)
+                .WithOne()
+                .HasForeignKey(v => v.ConfigId);
         }
     }
 }

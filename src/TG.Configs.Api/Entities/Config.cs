@@ -22,5 +22,7 @@ namespace TG.Configs.Api.Entities
         public DateTime UpdatedAt{ get; set; }
         
         public IReadOnlyList<Callback>? Callbacks { get; set; }
+        
+        public IReadOnlyCollection<ConfigVariable>? Variables { get; set; }
     }
 }
