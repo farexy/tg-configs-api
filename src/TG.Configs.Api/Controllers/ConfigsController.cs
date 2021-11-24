@@ -33,5 +33,15 @@ namespace TG.Configs.Api.Controllers
                 .NotFound(AppErrors.NotFound)
                 .Ok();
         }
+
+        [HttpGet("{id}/content")]
+        public async Task<ActionResult<string?>> GetContent([FromRoute] string id)
+        {
+            var result = await _mediator.Send(new GetConfigContentQuery(id));
+            return result.ToActionResult()
+                .BadRequest(AppErrors.InvalidSecret)
+                .NotFound(AppErrors.NotFound)
+                .Ok();
+        }
     }
 }
