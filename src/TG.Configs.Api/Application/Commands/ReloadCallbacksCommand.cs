@@ -49,12 +49,12 @@ namespace TG.Configs.Api.Application.Commands
         private async Task<List<string>> GetUrlsAsync(Callback callback, CancellationToken cancellationToken)
         {
             var urls = new List<string>();
-            if (callback.Url != null)
+            if (!string.IsNullOrEmpty(callback.Url))
             {
                 urls.Add(callback.Url);
             }
 
-            if (callback.TgApp != null)
+            if (!string.IsNullOrEmpty(callback.TgApp))
             {
                 var result = await _appsManagerClient.GetEndpointsAsync(callback.TgApp, cancellationToken);
                 urls.AddRange(result.Result!.Endpoints!.Select(e => e.Ip)
