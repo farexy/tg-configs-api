@@ -8,6 +8,7 @@ namespace TG.Configs.Api.Db
     {
         public DbSet<Entities.Config> Configs { get; set; } = default!;
         public DbSet<Callback> Callbacks { get; set; } = default!;
+        public DbSet<ConfigVariable> ConfigVariables { get; set; } = default!;
         
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
