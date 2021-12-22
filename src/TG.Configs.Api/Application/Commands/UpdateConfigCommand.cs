@@ -7,6 +7,7 @@ using TG.Configs.Api.Db;
 using TG.Configs.Api.Entities;
 using TG.Configs.Api.Errors;
 using TG.Configs.Api.Models.Response;
+using TG.Configs.Api.Services;
 using TG.Core.App.OperationResults;
 using TG.Core.App.Services;
 
@@ -19,13 +20,15 @@ namespace TG.Configs.Api.Application.Commands
         private readonly ApplicationDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IDateTimeProvider _dateTimeProvider;
+        private readonly IConfigContentCache _configContentCache;
 
         public UpdateConfigCommandHandler(ApplicationDbContext dbContext, IMapper mapper,
-            IDateTimeProvider dateTimeProvider)
+            IDateTimeProvider dateTimeProvider, IConfigContentCache configContentCache)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _dateTimeProvider = dateTimeProvider;
+            _configContentCache = configContentCache;
         }
 
         public async Task<OperationResult<ConfigManagementResponse>> Handle(UpdateConfigCommand request, CancellationToken cancellationToken)
@@ -41,6 +44,7 @@ namespace TG.Configs.Api.Application.Commands
             config.UpdatedBy = request.UserEmail;
             config.UpdatedAt = _dateTimeProvider.UtcNow;
 
+            _configContentCache.Reset();
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             return _mapper.Map<ConfigManagementResponse>(config);

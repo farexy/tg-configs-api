@@ -63,6 +63,8 @@ namespace TG.Configs.Api
             });
 
             services.AddHttpClient<ICallbacksClient, CallbacksClient>();
+
+            services.AddSingleton<IConfigContentCache, ConfigContentCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

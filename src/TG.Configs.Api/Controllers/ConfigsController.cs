@@ -1,20 +1,20 @@
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TG.Configs.Api.Application.Queries;
 using TG.Configs.Api.Config;
 using TG.Configs.Api.Errors;
-using TG.Configs.Api.Models.Response;
 using TG.Core.App.Constants;
-using TG.Core.App.InternalCalls;
 using TG.Core.App.OperationResults;
 
 namespace TG.Configs.Api.Controllers
 {
-    [GsApi]
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
-    [Route(ServiceConst.BaseRoutePrefix)]
+    [Route(ServiceConst.RoutePrefix)]
+    [Authorize]
     public class ConfigsController : ControllerBase
     {
         private readonly IMediator _mediator;
@@ -25,21 +25,10 @@ namespace TG.Configs.Api.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ConfigResponse>> Get([FromRoute] string id)
+        public async Task<ActionResult<object?>> GetContent([FromRoute] string id, [FromQuery, Required] string secret)
         {
-            var result = await _mediator.Send(new GetConfigQuery(id));
+            var result = await _mediator.Send(new GetClientConfigContentQuery(id, secret));
             return result.ToActionResult()
-                .BadRequest(AppErrors.InvalidSecret)
-                .NotFound(AppErrors.NotFound)
-                .Ok();
-        }
-
-        [HttpGet("{id}/content")]
-        public async Task<ActionResult<string?>> GetContent([FromRoute] string id)
-        {
-            var result = await _mediator.Send(new GetConfigContentQuery(id));
-            return result.ToActionResult()
-                .BadRequest(AppErrors.InvalidSecret)
                 .NotFound(AppErrors.NotFound)
                 .Ok();
         }

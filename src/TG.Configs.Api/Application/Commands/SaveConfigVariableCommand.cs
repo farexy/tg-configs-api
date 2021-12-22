@@ -5,6 +5,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using TG.Configs.Api.Db;
 using TG.Configs.Api.Entities;
+using TG.Configs.Api.Services;
 using TG.Core.App.OperationResults;
 
 namespace TG.Configs.Api.Application.Commands
@@ -14,10 +15,12 @@ namespace TG.Configs.Api.Application.Commands
     public class SaveConfigVariableCommandHandler : IRequestHandler<SaveConfigVariableCommand, OperationResult>
     {
         private readonly ApplicationDbContext _dbContext;
+        private readonly IConfigContentCache _configContentCache;
 
-        public SaveConfigVariableCommandHandler(ApplicationDbContext dbContext)
+        public SaveConfigVariableCommandHandler(ApplicationDbContext dbContext, IConfigContentCache configContentCache)
         {
             _dbContext = dbContext;
+            _configContentCache = configContentCache;
         }
 
         public async Task<OperationResult> Handle(SaveConfigVariableCommand request, CancellationToken cancellationToken)
@@ -44,6 +47,7 @@ namespace TG.Configs.Api.Application.Commands
                 variable.Value = request.Value;
             }
 
+            _configContentCache.Reset();
             await _dbContext.SaveChangesAsync(cancellationToken);
             
             return OperationResult.Success();

@@ -7,6 +7,7 @@ namespace TG.Configs.Api.Config
 
         public const string BaseRoutePrefix = ServiceName + "/v{version:apiVersion}";
         public const string RoutePrefix = BaseRoutePrefix + "/[controller]";
+        public const string BattleServerRoutePrefix = ServiceName + "/bs/v{version:apiVersion}/[controller]";
         public const string BaseInternalRoutePrefix = "internal/" + ServiceName + "/v{version:apiVersion}";
         public const string InternalRoutePrefix = BaseInternalRoutePrefix + "/[controller]";
     }
