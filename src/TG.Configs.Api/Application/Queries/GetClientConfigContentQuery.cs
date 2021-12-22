@@ -27,21 +27,21 @@ namespace TG.Configs.Api.Application.Queries
         public async Task<OperationResult<object?>> Handle(GetClientConfigContentQuery request, CancellationToken cancellationToken)
         {
             var (configId, secret) = request;
-            var cached = _contentCache.Find(configId, secret);
-            if (cached is not null)
+            var content = _contentCache.Find(configId, secret);
+            if (content is null)
             {
-                return cached;
-            }
-            var config = await _dbContext.Configs
-                .Include(c => c.Variables)
-                .FirstOrDefaultAsync(c => c.Id == configId && c.Secret == secret, cancellationToken);
-            if (config is null)
-            {
-                return AppErrors.NotFound;
+                var config = await _dbContext.Configs
+                    .Include(c => c.Variables)
+                    .FirstOrDefaultAsync(c => c.Id == configId && c.Secret == secret, cancellationToken);
+                if (config is null)
+                {
+                    return AppErrors.NotFound;
+                }
+
+                content = config.GetContentWithVariables();
+                _contentCache.Set(configId, secret, content);
             }
 
-            var content = config.GetContentWithVariables();
-            _contentCache.Set(configId, secret, content);
             return TgJsonSerializer.Deserialize<object?>(content);
         }
     }
