@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -7,10 +8,11 @@ using TG.Configs.Api.Db;
 using TG.Configs.Api.Entities;
 using TG.Configs.Api.Services;
 using TG.Core.App.OperationResults;
+using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record SaveConfigVariableCommand(string ConfigId, string Secret, string Key, string? Value) : IRequest<OperationResult>;
+    public record SaveConfigVariableCommand(string ConfigId, string Sign, string Key, string? Value) : IRequest<OperationResult>;
     
     public class SaveConfigVariableCommandHandler : IRequestHandler<SaveConfigVariableCommand, OperationResult>
     {
@@ -25,10 +27,18 @@ namespace TG.Configs.Api.Application.Commands
 
         public async Task<OperationResult> Handle(SaveConfigVariableCommand request, CancellationToken cancellationToken)
         {
-            if (!await _dbContext.Configs.AnyAsync(c => c.Id == request.ConfigId && c.Secret == request.Secret, cancellationToken))
+            var secret = await _dbContext.Configs
+                .Where(c => c.Id == request.ConfigId)
+                .Select(c => c.Secret)
+                .FirstOrDefaultAsync(cancellationToken);
+            
+            var calculatedSign = Sha256Helper.GetSha256Hash(request.Key + request.Value + secret);
+
+            if (calculatedSign != request.Sign)
             {
                 throw new UnauthorizedAccessException();
             }
+            
             var variable = await _dbContext.ConfigVariables
                 .FirstOrDefaultAsync(v => v.ConfigId == request.ConfigId && v.Key == request.Key, cancellationToken);
 

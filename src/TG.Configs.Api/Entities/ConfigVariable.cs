@@ -7,5 +7,7 @@ namespace TG.Configs.Api.Entities
         public string Key { get; set; } = default!;
         
         public string? Value { get; set; }
+        
+        public Config? Config { get; set; }
     }
 }

@@ -4,10 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using TG.Configs.Api.Config;
-using TG.Configs.Api.Helpers;
-using TG.Configs.Api.ServiceClients;
 using TG.Core.App.InternalCalls;
 using TG.Core.App.OperationResults;
+using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Services
 {

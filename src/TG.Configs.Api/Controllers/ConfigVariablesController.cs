@@ -24,9 +24,9 @@ namespace TG.Configs.Api.Controllers
 
         [HttpPost("{configId}")]
         public async Task<ActionResult> SaveVariable(
-            [FromRoute] string configId, [FromQuery, Required] string secret, [FromQuery] bool reload, [FromBody] ConfigVariableRequest request)
+            [FromRoute] string configId, [FromQuery, Required] string sign, [FromQuery] bool reload, [FromBody] ConfigVariableRequest request)
         {
-            var result = await _mediator.Send(new SaveConfigVariableCommand(configId, secret, request.Key, request.Value));
+            var result = await _mediator.Send(new SaveConfigVariableCommand(configId, sign, request.Key, request.Value));
             if (reload)
             {
                 await _mediator.Send(new ReloadCallbacksCommand(configId));
