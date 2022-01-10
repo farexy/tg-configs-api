@@ -91,9 +91,7 @@ variables:
     - kubectl apply -f k8s/service.yaml
     - kubectl apply -f k8s/autoscale.yaml
     - kubectl apply -f k8s/ingress_route.yaml
-    - if [ "$OPEN_BS_ROUTE" = "true" ] ; then 
-        kubectl apply -f k8s/dev_bs_ingress_route.yaml
-      fi
+    - if [ "$OPEN_BS_ROUTE" = "true" ] ; then kubectl apply -f k8s/dev_bs_ingress_route.yaml ; fi
 
 'DEV Deploy to cluster': 
   stage: deploy_dev
