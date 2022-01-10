@@ -14,7 +14,7 @@ namespace TG.Configs.Api.Controllers.BattleServer
     [BattleServerApi]
     [ApiController]
     [ApiVersion(ApiVersions.V1)]
-    [Route(ServiceConst.BaseRoutePrefix)]
+    [Route(ServiceConst.BattleServerRoutePrefix)]
     public class ConfigsController : ControllerBase
     {
         private readonly IMediator _mediator;
