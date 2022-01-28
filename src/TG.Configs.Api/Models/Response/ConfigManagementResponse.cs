@@ -13,6 +13,8 @@ namespace TG.Configs.Api.Models.Response
         public string? Content { get; set; }
 
         public string Format { get; set; } = default!;
+        
+        public bool HasSecrets { get; set; }
 
         public string CreatedBy { get; set; } = default!;
         

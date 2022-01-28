@@ -1,3 +1,6 @@
+using System;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -64,7 +67,11 @@ namespace TG.Configs.Api
 
             services.AddHttpClient<ICallbacksClient, CallbacksClient>();
 
-            services.AddSingleton<IConfigContentCache, ConfigContentCache>();
+            services.AddSingleton<IConfigsCache, ConfigsCache>();
+            services.AddScoped<IConfigsProvider, ConfigsProvider>();
+            services.AddSingleton<ISecretsService>(sp => new SecretsService(new SecretClient(
+                new Uri(Configuration.GetConnectionString("KeyVault")),
+                new DefaultAzureCredential())));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

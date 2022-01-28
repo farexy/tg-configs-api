@@ -32,7 +32,7 @@ namespace TG.Configs.Api.Application.Commands
             var config = await _dbContext.Configs
                 .Include(c => c.Callbacks)
                 .FirstOrDefaultAsync(c => c.Id == request.ConfigId, cancellationToken);
-            if (config.Callbacks is null)
+            if (config?.Callbacks is null)
             {
                 return OperationResult.Success();
             }

@@ -50,7 +50,8 @@ namespace TG.Configs.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<ConfigManagementResponse>> Create([FromBody] ConfigRequest request)
         {
-            var result = await _mediator.Send(new CreateConfigCommand(request.Id, request.Content, Parse(request.Format), User.GetEmail()));
+            var result = await _mediator.Send(new CreateConfigCommand(
+                request.Id, request.Content, Parse(request.Format), request.HasSecrets, User.GetEmail()));
             return result.ToActionResult()
                 .Created();
         }
@@ -58,7 +59,8 @@ namespace TG.Configs.Api.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ConfigManagementResponse>> Update([FromRoute] string id, [FromBody] ConfigRequest request)
         {
-            var result = await _mediator.Send(new UpdateConfigCommand(id, request.Content, Parse(request.Format), User.GetEmail()));
+            var result = await _mediator.Send(new UpdateConfigCommand(
+                id, request.Content, Parse(request.Format), request.HasSecrets, User.GetEmail()));
             return result.ToActionResult()
                 .NotFound(AppErrors.NotFound)
                 .Ok();

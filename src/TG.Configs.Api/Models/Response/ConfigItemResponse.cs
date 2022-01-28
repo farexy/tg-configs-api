@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using TG.Configs.Api.Entities;
 
 namespace TG.Configs.Api.Models.Response
 {

@@ -1,26 +1,30 @@
 using System.Collections.Concurrent;
+using TG.Configs.Api.Models.Dto;
 
 namespace TG.Configs.Api.Services
 {
-    public class ConfigContentCache : IConfigContentCache
+    public class ConfigsCache : IConfigsCache
     {
-        private readonly ConcurrentDictionary<string, string?> _cache = new();
+        private readonly ConcurrentDictionary<string, ConfigData> _cache = new();
 
-        public string? Find(string configId, string secret)
+        public ConfigData? Find(string configId)
         {
-            return _cache.TryGetValue(BuildKey(configId, secret), out var cnt) ? cnt : default;
+            return _cache.TryGetValue(configId, out var cnt) ? cnt : default;
         }
 
-        public string? Set(string configId, string secret, string? content)
+        public ConfigData? Set(string configId, ConfigData data)
         {
-            return _cache.AddOrUpdate(BuildKey(configId, secret), content, (_,_) => content);
+            return _cache.AddOrUpdate(configId, data, (_,_) => data);
+        }
+
+        public void Reset(string configId)
+        {
+            _cache.TryRemove(configId, out _);
         }
 
         public void Reset()
         {
             _cache.Clear();
         }
-
-        private static string BuildKey(string configId, string secret) => $"{configId}{secret}";
     }
 }

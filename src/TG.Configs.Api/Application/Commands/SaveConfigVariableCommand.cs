@@ -17,12 +17,12 @@ namespace TG.Configs.Api.Application.Commands
     public class SaveConfigVariableCommandHandler : IRequestHandler<SaveConfigVariableCommand, OperationResult>
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IConfigContentCache _configContentCache;
+        private readonly IConfigsCache _configsCache;
 
-        public SaveConfigVariableCommandHandler(ApplicationDbContext dbContext, IConfigContentCache configContentCache)
+        public SaveConfigVariableCommandHandler(ApplicationDbContext dbContext, IConfigsCache configsCache)
         {
             _dbContext = dbContext;
-            _configContentCache = configContentCache;
+            _configsCache = configsCache;
         }
 
         public async Task<OperationResult> Handle(SaveConfigVariableCommand request, CancellationToken cancellationToken)
@@ -57,9 +57,9 @@ namespace TG.Configs.Api.Application.Commands
                 variable.Value = request.Value;
             }
 
-            _configContentCache.Reset();
             await _dbContext.SaveChangesAsync(cancellationToken);
-            
+            _configsCache.Reset(request.ConfigId);
+
             return OperationResult.Success();
         }
     }

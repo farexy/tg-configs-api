@@ -11,7 +11,7 @@ using TG.Core.App.Services;
 
 namespace TG.Configs.Api.Application.Commands
 {
-    public record CreateConfigCommand(string Id, string? Content, ConfigFormat Format, string UserEmail) : IRequest<OperationResult<ConfigManagementResponse>>;
+    public record CreateConfigCommand(string Id, string? Content, ConfigFormat Format, bool HasSecrets, string UserEmail) : IRequest<OperationResult<ConfigManagementResponse>>;
     
     public class CreateConfigCommandHandler : IRequestHandler<CreateConfigCommand, OperationResult<ConfigManagementResponse>>
     {
@@ -43,6 +43,7 @@ namespace TG.Configs.Api.Application.Commands
                 Secret = _cryptoStringGenerator.Generate(SecretLength),
                 Content = optimizedContent,
                 Format = request.Format,
+                HasSecrets = request.HasSecrets,
                 CreatedBy = request.UserEmail,
                 CreatedAt = _dateTimeProvider.UtcNow,
                 UpdatedBy = request.UserEmail,

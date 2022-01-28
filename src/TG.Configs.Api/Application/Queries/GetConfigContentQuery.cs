@@ -1,10 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
-using TG.Configs.Api.Db;
 using TG.Configs.Api.Errors;
-using TG.Configs.Api.Helpers;
+using TG.Configs.Api.Services;
 using TG.Core.App.OperationResults;
 
 namespace TG.Configs.Api.Application.Queries
@@ -13,24 +11,22 @@ namespace TG.Configs.Api.Application.Queries
     
     public class GetConfigContentQueryHandler : IRequestHandler<GetConfigContentQuery, OperationResult<string?>>
     {
-        private readonly ApplicationDbContext _dbContext;
+        private readonly IConfigsProvider _configsProvider;
 
-        public GetConfigContentQueryHandler(ApplicationDbContext dbContext)
+        public GetConfigContentQueryHandler(IConfigsProvider configsProvider)
         {
-            _dbContext = dbContext;
+            _configsProvider = configsProvider;
         }
 
         public async Task<OperationResult<string?>> Handle(GetConfigContentQuery request, CancellationToken cancellationToken)
         {
-            var config = await _dbContext.Configs
-                .Include(c => c.Variables)
-                .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
+            var config = await _configsProvider.GetAsync(request.Id, cancellationToken);
             if (config is null)
             {
                 return AppErrors.NotFound;
             }
 
-            return config.GetContentWithVariables();
+            return config.Content;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using TG.Configs.Api.Entities;
-
-namespace TG.Configs.Api.Models.Request
+﻿namespace TG.Configs.Api.Models.Request
 {
     public class ConfigRequest
     {
@@ -9,5 +7,7 @@ namespace TG.Configs.Api.Models.Request
         public string? Content { get; set; }
 
         public string Format { get; set; } = default!;
+        
+        public bool HasSecrets { get; set; }
     }
 }
