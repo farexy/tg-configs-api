@@ -22,7 +22,7 @@ public class ConfigsProvider : IConfigsProvider
 
     public async Task<ConfigData?> GetAsync(string configId, CancellationToken cancellationToken)
     {
-        var cachedData = _cache.Find(configId);
+        var cachedData = await _cache.FindAsync(configId);
         if (cachedData is not null)
         {
             return cachedData;
@@ -48,7 +48,7 @@ public class ConfigsProvider : IConfigsProvider
             Content = content,
             Secret = config.Secret,
         };
-        _cache.Set(configId, cachedData);
+        await _cache.SetAsync(configId, cachedData);
 
         return cachedData;
     }

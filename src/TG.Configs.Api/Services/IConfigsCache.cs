@@ -1,12 +1,12 @@
+using System.Threading.Tasks;
 using TG.Configs.Api.Models.Dto;
 
 namespace TG.Configs.Api.Services
 {
     public interface IConfigsCache
     {
-        ConfigData? Find(string configId);
-        ConfigData? Set(string configId, ConfigData data);
-        void Reset(string configId);
-        void Reset();
+        Task<ConfigData?> FindAsync(string configId);
+        Task SetAsync(string configId, ConfigData data);
+        Task ResetAsync(string configId);
     }
 }

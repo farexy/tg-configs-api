@@ -58,7 +58,7 @@ namespace TG.Configs.Api.Application.Commands
             }
 
             await _dbContext.SaveChangesAsync(cancellationToken);
-            _configsCache.Reset(request.ConfigId);
+            await _configsCache.ResetAsync(request.ConfigId);
 
             return OperationResult.Success();
         }

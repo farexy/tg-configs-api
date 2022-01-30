@@ -33,7 +33,7 @@ namespace TG.Configs.Api.Application.Commands
             
             _dbContext.Remove(config);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            _configsCache.Reset(config.Id);
+            await _configsCache.ResetAsync(config.Id);
 
             return OperationResult.Success();
         }

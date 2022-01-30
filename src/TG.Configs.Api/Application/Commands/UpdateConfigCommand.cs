@@ -51,7 +51,7 @@ namespace TG.Configs.Api.Application.Commands
             config.UpdatedAt = _dateTimeProvider.UtcNow;
 
             await _dbContext.SaveChangesAsync(cancellationToken);
-            _configsCache.Reset(config.Id);
+            await _configsCache.ResetAsync(config.Id);
 
             return _mapper.Map<ConfigManagementResponse>(config);
         }

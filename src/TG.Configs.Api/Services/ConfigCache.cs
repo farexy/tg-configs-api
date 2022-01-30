@@ -1,30 +1,34 @@
-using System.Collections.Concurrent;
+using System.Threading.Tasks;
+using StackExchange.Redis;
 using TG.Configs.Api.Models.Dto;
+using TG.Core.App.Json;
 
 namespace TG.Configs.Api.Services
 {
     public class ConfigsCache : IConfigsCache
     {
-        private readonly ConcurrentDictionary<string, ConfigData> _cache = new();
+        private const string ConfigsKey = "configs";
+        private readonly IDatabase _redis;
 
-        public ConfigData? Find(string configId)
+        public ConfigsCache(IDatabase redis)
         {
-            return _cache.TryGetValue(configId, out var cnt) ? cnt : default;
+            _redis = redis;
         }
 
-        public ConfigData? Set(string configId, ConfigData data)
+        public async Task<ConfigData?> FindAsync(string configId)
         {
-            return _cache.AddOrUpdate(configId, data, (_,_) => data);
+            var data = await _redis.HashGetAsync(ConfigsKey, configId);
+            return data.HasValue ? TgJsonSerializer.Deserialize<ConfigData>(data) : null;
         }
 
-        public void Reset(string configId)
+        public Task SetAsync(string configId, ConfigData data)
         {
-            _cache.TryRemove(configId, out _);
+            return _redis.HashSetAsync(ConfigsKey, configId, TgJsonSerializer.Serialize(data));
         }
 
-        public void Reset()
+        public Task ResetAsync(string configId)
         {
-            _cache.Clear();
+            return _redis.HashDeleteAsync(ConfigsKey, configId);
         }
     }
 }

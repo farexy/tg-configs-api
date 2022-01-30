@@ -17,6 +17,7 @@ using TG.Core.App.InternalCalls;
 using TG.Core.App.Middlewares;
 using TG.Core.App.Swagger;
 using TG.Core.Db.Postgres;
+using TG.Core.Redis.Extensions;
 
 namespace TG.Configs.Api
 {
@@ -57,6 +58,8 @@ namespace TG.Configs.Api
 
             services.ConfigureInternalCalls(Configuration);
             services.AddServiceClient<IAppsManagerClient>(Configuration.GetServiceInternalUrl(TgServices.Manager)); 
+
+            services.AddTgRedis(Configuration);
 
             services.AddTgSwagger(opt =>
             {
