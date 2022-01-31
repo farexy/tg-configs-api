@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using StackExchange.Redis;
 using TG.Configs.Api.Models.Dto;
@@ -7,6 +8,7 @@ namespace TG.Configs.Api.Services
 {
     public class ConfigsCache : IConfigsCache
     {
+        private static readonly TimeSpan CacheProlong = TimeSpan.FromMinutes(10);
         private const string ConfigsKey = "configs";
         private readonly IDatabase _redis;
 
@@ -21,9 +23,10 @@ namespace TG.Configs.Api.Services
             return data.HasValue ? TgJsonSerializer.Deserialize<ConfigData>(data) : null;
         }
 
-        public Task SetAsync(string configId, ConfigData data)
+        public async Task SetAsync(string configId, ConfigData data)
         {
-            return _redis.HashSetAsync(ConfigsKey, configId, TgJsonSerializer.Serialize(data));
+            await _redis.HashSetAsync(ConfigsKey, configId, TgJsonSerializer.Serialize(data));
+            await _redis.KeyExpireAsync(ConfigsKey, CacheProlong);
         }
 
         public Task ResetAsync(string configId)

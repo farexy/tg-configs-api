@@ -27,6 +27,7 @@ namespace TG.Configs.Api.Application.Queries
         {
             var config = await _dbContext.Configs
                 .Include(c => c.Callbacks)
+                .Include(c => c.Variables)
                 .FirstOrDefaultAsync(c => c.Id == request.Id, cancellationToken);
             if (config is null)
             {

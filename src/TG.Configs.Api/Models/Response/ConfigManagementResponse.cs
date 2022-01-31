@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using TG.Configs.Api.Entities;
 
 namespace TG.Configs.Api.Models.Response
 {
@@ -24,6 +23,8 @@ namespace TG.Configs.Api.Models.Response
         
         public DateTime UpdatedAt{ get; set; }
         
-        public IReadOnlyList<Callback>? Callbacks { get; set; }
+        public IReadOnlyList<CallbackResponse>? Callbacks { get; set; }
+        
+        public IReadOnlyCollection<ConfigVariableResponse>? Variables { get; set; }
     }
 }
